@@ -1,0 +1,30 @@
+CREATE DATABASE IF NOT EXISTS Digital_identity
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_unicode_ci;
+
+USE Digital_identity;
+
+CREATE TABLE IF NOT EXISTS admins (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(80) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS students (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  full_name VARCHAR(150) NOT NULL,
+  student_id VARCHAR(60) NOT NULL UNIQUE,
+  email VARCHAR(190) NOT NULL UNIQUE,
+  phone VARCHAR(30) NOT NULL,
+  department VARCHAR(120) NOT NULL,
+  program VARCHAR(120) NOT NULL,
+  photo_path VARCHAR(255) DEFAULT NULL,
+  status ENUM('pending', 'approved', 'rejected') NOT NULL DEFAULT 'pending',
+  rejection_reason VARCHAR(500) DEFAULT NULL,
+  public_code CHAR(64) DEFAULT NULL UNIQUE,
+  card_number VARCHAR(40) DEFAULT NULL UNIQUE,
+  submitted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  reviewed_at TIMESTAMP NULL DEFAULT NULL,
+  INDEX idx_students_status_submitted (status, submitted_at)
+) ENGINE=InnoDB;
